@@ -67,7 +67,7 @@
                 style="display: block; margin: auto auto 30px auto; width: 30%;"></a>
         <h2 style="text-align: center;">گزارش ماهانه</h2>
         <p style="text-align: center;">برای ارسال گزارش ماهانه، فرم زیر را تکمیل و ارسال نمایید</p>
-        <form method="post" style="max-width: fit-content;">
+        <form method="post">
             {% csrf_token %}
             {{ form|crispy}}
             <button type="submit" class="btn btn-primary">ارسال</button>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load persian_numbers %}
 {% load static %}
 <html lang="fa-IR">
 
@@ -59,35 +60,27 @@
                                     </div>
 
                                     <form method="post">
+                                        <p>بررسی کد یکبار مصرف</p>
+                                        
                                         {% csrf_token %}
-                                        <p>برای ورود به پنل اطلاعات خود را وارد نمایید.</p>
-
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <input type="tel" id="opt" class="form-control" style="direction: rtl;"
+                                            name="otp" placeholder="کد یکبار مصرف" required />
+                                            <label class="form-label" for="otp">کد یکبار مصرف ارسال شده به {{ phone_number|persian_numbers }} را وارد نمایید</label>
+                                        </div>
+                                        
                                         {% for message in messages %}
-                                        <div>{{ message }}</div>
+                                        <div style="background-color: rgb(255, 198, 198); padding: 10px; border-radius: 5px; margin-bottom: 20px;">{{ message }}</div>
                                         {% endfor %}
-
-                                        <div data-mdb-input-init class="form-outline mb-4">
-                                            <input type="tel" id="phone_number" class="form-control"
-                                                style="direction: rtl;" name="phone_number"
-                                                placeholder="شماره موبایل خود را وارد نمایید." required />
-                                            <label class="form-label" for="phone_number">تلفن همراه</label>
-                                        </div>
-
-                                        <div data-mdb-input-init class="form-outline mb-4">
-                                            <input name="password" type="password" id="password" class="form-control"
-                                                required placeholder="گذرواژه خود را وارد نمایید." />
-                                            <label class="form-label" for="password">گذرواژه</label>
-                                        </div>
-
-
+                                        
                                         <div class="text-center pt-1 mb-5 pb-1">
                                             <button data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
-                                                type="submit">ورود به پنل یکپارچه متافن</button>
+                                            class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
+                                            type="submit">بررسی کد یکبار مصرف</button>
                                         </div>
-
+                                        
                                     </form>
-
+                                    
                                 </div>
                             </div>
                             <div class="col-lg-6 d-flex align-items-center gradient-custom-2">

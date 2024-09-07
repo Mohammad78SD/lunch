@@ -16,54 +16,38 @@ import jdatetime
 import locale
 from celery.schedules import crontab
 
-#static files:
+# static files:
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, "staticfiles"),
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# CELERY SETINGSCELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Tehran'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_BEAT_SCHEDULE = {
-    'send-lunch-reservation-sms': {
-        'task': 'lunch.tasks.send_lunch_reservation_sms',
-        'schedule': crontab(hour=15, minute=27, day_of_week='sat-wed'),  # Saturday to Wednesday, 16:30
-    },
-}
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
-
-
-AUTH_USER_MODEL = 'lunch.CustomUser'
+AUTH_USER_MODEL = "lunch.CustomUser"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-LANGUAGE_CODE = 'fa-ir'
+LANGUAGE_CODE = "fa-ir"
 locale.setlocale(locale.LC_ALL, jdatetime.FA_LOCALE)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pr6b=5^i$pi5gx42-zgvjrlp@++uo2x+juee#1z%z7@k(f5yg@'
+SECRET_KEY = "django-insecure-pr6b=5^i$pi5gx42-zgvjrlp@++uo2x+juee#1z%z7@k(f5yg@"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['panel.metafan.info', '127.0.0.1', '192.168.1.17']
-
+ALLOWED_HOSTS = ["panel.metafan.info", "127.0.0.1", "192.168.121.211"]
 
 
 # Application definition
@@ -71,63 +55,62 @@ ALLOWED_HOSTS = ['panel.metafan.info', '127.0.0.1', '192.168.1.17']
 INSTALLED_APPS = [
     "unfold",
     "crispy_forms",
-    'crispy_bootstrap4',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'lunch',
-    'django_jalali',
-    'surveys',
-    'sqlite3',
-    'messaging',
-    'pwa',
-
+    "crispy_bootstrap4",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "lunch",
+    "django_jalali",
+    "surveys",
+    "sqlite3",
+    "messaging",
+    "pwa",
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-ROOT_URLCONF = 'MetafanLunch.urls'
+ROOT_URLCONF = "MetafanLunch.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'MetafanLunch.wsgi.application'
+WSGI_APPLICATION = "MetafanLunch.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -155,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 
-TIME_ZONE = 'Asia/Tehran'
+TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
 
@@ -166,82 +149,72 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+VAPID_PUBLIC_KEY = "BOIB34wIndy_DQ3rUBIQfcP5PTLoiH7ux8ztyjxGBngsVHSn57fK8hTaOKVX_51KV3Uz9Nm7Gw7oGLwmIGMNUFI"
+VAPID_PRIVATE_KEY = ("OGB9YwZ8HQiwlVRX1y19FnqEl-S1IEA8yRHo7wljEag",)
+VAPID_ADMIN_EMAIL = "info@metafan.info"
 
-VAPID_PUBLIC_KEY = 'BOIB34wIndy_DQ3rUBIQfcP5PTLoiH7ux8ztyjxGBngsVHSn57fK8hTaOKVX_51KV3Uz9Nm7Gw7oGLwmIGMNUFI'
-VAPID_PRIVATE_KEY = 'OGB9YwZ8HQiwlVRX1y19FnqEl-S1IEA8yRHo7wljEag',
-VAPID_ADMIN_EMAIL = 'info@metafan.info'
 
-PWA_APP_NAME = 'Metafan'
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, "staticfiles", "service-worker.js")
+
+PWA_APP_NAME = "Metafan"
 PWA_APP_DESCRIPTION = "سامانه یکپارچه متافن"
-PWA_APP_THEME_COLOR = '#d4f1f7'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'portrait'
-PWA_APP_START_URL = '/'
-PWA_APP_STATUS_BAR_COLOR = 'default'
-PWA_APP_ICONS = [
-    {
-        'src': '/static/images/metafan-logo.webp',
-        'sizes': '1058x1108'
-    }
-]
+PWA_APP_THEME_COLOR = "#d4f1f7"
+PWA_APP_BACKGROUND_COLOR = "#ffffff"
+PWA_APP_DISPLAY = "standalone"
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = "portrait"
+PWA_APP_START_URL = "/"
+PWA_APP_STATUS_BAR_COLOR = "default"
+PWA_APP_ICONS = [{"src": "/static/images/metafan-logo.webp", "sizes": "1058x1108"}]
 PWA_APP_ICONS_APPLE = [
-    {
-        'src': '/static/images/metafan-logo.webp',
-        'sizes': '1058x1108'
-    }
+    {"src": "/static/images/metafan-logo.webp", "sizes": "1058x1108"}
 ]
 PWA_APP_SPLASH_SCREEN = [
     {
-        'src': '/static/images/icons/splash-640x1136.png',
-        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+        "src": "/static/images/icons/splash-640x1136.png",
+        "media": "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
     }
 ]
-PWA_APP_DIR = 'rtl'
-PWA_APP_LANG = 'fa-IR'
-PWA_APP_SHORTCUTS = [
-    {
-        'name': 'Shortcut',
-        'url': '/target',
-        'description': 'Shortcut to a page in my application'
-    }
-]
-PWA_APP_SCREENSHOTS = [
-    {
-      'src': '/static/images/icons/splash-750x1334.png',
-      'sizes': '750x1334',
-      "type": "image/png"
-    }
-]
-
-
+PWA_APP_DIR = "rtl"
+PWA_APP_LANG = "fa-IR"
+# PWA_APP_SHORTCUTS = [
+#     {
+#         "name": "Shortcut",
+#         "url": "/target",
+#         "description": "Shortcut to a page in my application",
+#     }
+# ]
+# PWA_APP_SCREENSHOTS = [
+#     {
+#         "src": "/static/images/icons/splash-750x1334.png",
+#         "sizes": "750x1334",
+#         "type": "image/png",
+#     }
+# ]
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'D:/Workspaces/Metafan/lunch/metafanlunch/debug.log',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "debug.log"),
+            "encoding": "utf-8",
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
         },
     },
 }
-

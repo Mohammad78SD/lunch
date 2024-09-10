@@ -47,7 +47,7 @@ SECRET_KEY = "django-insecure-pr6b=5^i$pi5gx42-zgvjrlp@++uo2x+juee#1z%z7@k(f5yg@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["panel.metafan.info", "127.0.0.1", "192.168.121.211"]
+ALLOWED_HOSTS = ["panel.metafan.info", "127.0.0.1", "192.168.229.211"]
 
 
 # Application definition

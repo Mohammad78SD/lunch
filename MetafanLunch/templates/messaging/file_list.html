@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load persian_numbers %}
+{% block content %}
+    <div class="main-content font-size-13">
+        <style>
+            .main-content a {
+                color: #000 !important;
+            }
+        </style>
+        <div class="tab__box">
+            <div class="tab__items">
+                <a class="tab__item is-active" href="{% url 'file_list' %}">لیست فایل ها</a>
+                <a class="tab__item" href="{% url 'send_file' %}">ارسال یک فایل جدید</a>
+            </div>
+        </div>
+        <div class="table__box">
+            <table class="table">
+                <thead role="rowgroup">
+                    <tr role="row" class="title-row">
+                        <th>نام فایل</th>
+                        <th>ارسال کننده</th>
+                        <th>تاریخ و زمان ارسال</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in received_files %}
+                        <tr role="row" class="">
+                            <td><a href="{% url 'download_file' file.id %}">{{ file.name }}</a></td>
+
+                            <td>{{ file.sender.first_name }} {{ file.sender.last_name }}</td>
+                            <td>{{ file.created_at|date:'Y/m/d, H:i'|persian_numbers }}</td>
+                            <td>
+                                <a href="{% url 'download_file' file.id %}" class="item-eye mlg-15" title="Download"></a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="6">No files received yet.</td></tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

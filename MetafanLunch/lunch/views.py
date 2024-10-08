@@ -140,6 +140,10 @@ def otp_verify_view(request, phone_number):
             messages.error(request, "کد یکبار مصرف اشتباه است لطفا مجدد تلاش نمایید.")
     return render(request, "lunch/otp_verify.html", {"phone_number": phone_number})
 
+@login_required
+def profile_info(request):
+    profile_info = request.user
+    return render(request, "lunch/profile_info.html", {"profile_info": profile_info})
 
 @login_required(login_url="login")
 def reserve_lunch(request):

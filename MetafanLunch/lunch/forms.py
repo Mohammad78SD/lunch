@@ -2,13 +2,16 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import CustomUser
 
+
 class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Password confirmation", widget=forms.PasswordInput
+    )
 
     class Meta:
         model = CustomUser
-        fields = ('phone_number', 'first_name', 'last_name')
+        fields = ("phone_number", "first_name", "last_name")
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -24,13 +27,27 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
 
+
 class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField(label=("Password"),
-        help_text=("از طریق <a href=\"../password/\" style= color:purple>این لینک</a> گذرواژه را تغییر دهید."))
+    password = ReadOnlyPasswordHashField(
+        label=("Password"),
+        help_text=(
+            'از طریق <a href="../password/" style= color:purple>این لینک</a> گذرواژه را تغییر دهید.'
+        ),
+    )
 
     class Meta:
         model = CustomUser
-        fields = ('phone_number', 'first_name', 'last_name', 'password', 'is_active', 'is_staff', 'is_superuser')
+        fields = (
+            "phone_number",
+            "first_name",
+            "last_name",
+            "father_name",
+            "password",
+            "is_active",
+            "is_staff",
+            "is_superuser",
+        )
 
     def clean_password(self):
         return self.initial["password"]

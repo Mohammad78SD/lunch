@@ -36,10 +36,23 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(phone_number, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, verbose_name='تصویر پروفایل')
     phone_number = models.CharField(max_length=15, unique=True, verbose_name='شماره موبایل')
     first_name = models.CharField(max_length=30, verbose_name='نام')
     last_name = models.CharField(max_length=30,verbose_name='نام خانوادگی')
-    is_active = models.BooleanField(default=True, verbose_name='وضعیت کاربر')
+    father_name = models.CharField(max_length=30,verbose_name='نام پدر', null=True, blank=True)
+    birthdate = jmodels.jDateField(verbose_name='تاریخ تولد', null=True, blank=True)
+    national_code = models.CharField(max_length=10, verbose_name='کد ملی', null=True, blank=True)
+    address = models.TextField(verbose_name='آدرس', null=True, blank=True)
+    postal_code = models.CharField(max_length=10, verbose_name='کد پستی', null=True,blank=True)
+    education = models.CharField(max_length=30, verbose_name='آخرین مدرک تحصیلی', null=True, blank=True)
+    major = models.CharField(max_length=30, verbose_name='رشته تحصیلی', null=True, blank=True)
+    start_date = jmodels.jDateField(verbose_name='تاریخ شروع به کار', null=True, blank=True)
+    description = models.TextField(verbose_name='توضیحات' ,null=True, blank=True)
+    end_date = jmodels.jDateField(verbose_name='تاریخ پایان کار', null=True, blank=True)
+
+    is_file = models.BooleanField(default=False, verbose_name='کاربر فایلی است؟')
+    is_active = models.BooleanField(default=True, verbose_name='وضعیت کاربر' )
     is_staff = models.BooleanField(default=False, verbose_name='آیا ادمین است؟')
 
     objects = CustomUserManager()

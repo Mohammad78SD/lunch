@@ -2,67 +2,60 @@
 {% block content %}
 {% load persian_numbers %}
 {% load static %}
-<div class="bg-white padding-20" style="margin: 20px;">
+<div class="bg-white padding-20" style="margin: 20px 20px 0 20px;">
 
     <h2 style="text-align: center;">رزرو ناهار</h2>
-    <p style="text-align: center;">با انتخاب هر روز، ناهار آن روز برای شما رزرو می شود. هر روز تا ساعت ۷ صبح زمان دارید تا رزرو روز بعد را ثبت و یا کنسل نمایید.</p>
+    <p style="text-align: center;">با انتخاب هر روز، ناهار آن روز برای شما رزرو می شود. هر روز تا ساعت ۷ صبح زمان دارید
+        تا رزرو روز بعد را ثبت و یا کنسل نمایید.</p>
     {% if error %}
     <div class="alert alert-danger" role="alert">
         {{ error }}
     </div>
     {% endif %}
-    </div>
-<div class="table__box" style="padding: 20px;">
-    <table class="table">
-
-        <form method="post" action="{% url 'reserve_lunch' %}">
-            {% csrf_token %}
-        <thead role="rowgroup">
-        <tr role="row" class="title-row">
-            <th>روز</th>
-            <th>تاریخ</th>
-            <th>وضعیت</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr role="row" >
-            <td>120</td>
-            <td>تایید شده</td>
-            <td>70%</td>
-        </tr>
-
-
-        </tbody>
-    </table>
 </div>
-    <div class="bg-white padding-20" style="margin: 20px;">
 
-        <h2 style="text-align: center;">رزرو ناهار</h2>
-        <p style="text-align: center;">با انتخاب هر روز، ناهار آن روز برای شما رزرو می شود. هر روز تا ساعت ۷ صبح زمان دارید تا رزرو روز بعد را ثبت و یا کنسل نمایید.</p>
+<div class="table__box" style="padding: 20px;">
+    <form method="post" action="{% url 'reserve_lunch' %}">
+        {% csrf_token %}
+        <table class="table" style="border-spacing: 0;">
+            <thead>
+                <tr class="title-row">
+                    <th>روز</th>
+                    <th>تاریخ</th>
+                    <th>وضعیت رزرو</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day, date, is_reserved in dates %}
+                <tr>
+                    <td>{{ day }}</td>
+                    <td>{{ date|persian_numbers }}</td>
+                    <td>
+                        <input class="form-check-input" type="checkbox" value="{{ date }}"
+                            id="date{{ forloop.counter }}" name="selected_dates" {% if is_reserved %}checked{% endif %}>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if messages %}
+        <div class="alert alert-success" role="alert" id="success-message"
+            style="text-align: center; margin-top: 1rem;">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
         {% if error %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert" style="text-align: center; margin-top: 1rem;">
             {{ error }}
         </div>
         {% endif %}
-        <form method="post" action="{% url 'reserve_lunch' %}">
-            {% csrf_token %}
-            {% for day, date, is_reserved in dates %}
-            <div class="form-check date-item">
-                <input class="form-check-input" type="checkbox" value="{{ date }}" id="date{{ forloop.counter }}"
-                    name="selected_dates" {% if is_reserved %}checked{% endif %}>
-                <label class="form-check-label" for="date{{ forloop.counter }}">
-                    {{ day }} - {{ date|persian_numbers }}
-                </label>
-            </div>
-            {% endfor %}
-            {% if messages %}
-            <div class="alert alert-success" role="alert" id="success-message" style="text-align: center; margin-top: 3rem;">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %} 
-            <button type="submit" class="btn btn-primary">ثبت تغییرات</button>
-        </form>
-    </div>
-    {% endblock %}
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" class="btn btn-netcopy_net"
+                style=" margin-top: 1rem; display: block; padding: 10px 20% 10px 20%;">ثبت
+                تغییرات</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

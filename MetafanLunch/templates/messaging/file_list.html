@@ -13,6 +13,9 @@
                 <a class="tab__item" href="{% url 'send_file' %}">ارسال یک فایل جدید</a>
             </div>
         </div>
+        {% for message in messages %}
+        <div style="background-color: rgb(198, 255, 198); padding: 10px; border-radius: 5px; margin-bottom: 20px;">{{ message }}</div>
+        {% endfor %}
         <div class="table__box">
             <table class="table">
                 <thead role="rowgroup">
@@ -31,11 +34,11 @@
                             <td>{{ file.sender.first_name }} {{ file.sender.last_name }}</td>
                             <td>{{ file.created_at|date:'Y/m/d, H:i'|persian_numbers }}</td>
                             <td>
-                                <a href="{% url 'download_file' file.id %}" class="item-eye mlg-15" title="Download"></a>
+                                <a href="{% url 'download_file' file.id %}" class="item-eye mlg-15" title="دریافت فایل"></a>
                             </td>
                         </tr>
                     {% empty %}
-                        <tr><td colspan="6">No files received yet.</td></tr>
+                        <tr><td colspan="6">شما تا کنون هیچ فایلی دریافت نکرده اید!</td></tr>
                     {% endfor %}
 
                 </tbody>

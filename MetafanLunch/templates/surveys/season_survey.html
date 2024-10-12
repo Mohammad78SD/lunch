@@ -7,6 +7,9 @@
 
     <h2 style="text-align: center;">نظرسنجی فصلی</h2>
     <p style="text-align: center;">1 کمترین و 5 بیشترین مقدار را دارد.</p>
+    {% for message in messages %}
+    <div style="background-color: rgb(198, 255, 198); padding: 10px; border-radius: 5px; margin-bottom: 20px;">{{ message }}</div>
+    {% endfor %}
     <br>
     <form method="post">
         {% csrf_token %}

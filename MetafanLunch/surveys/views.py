@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ReportForm, SeasonForm
-from .models import Payslip, SeasonSurveyQuestion as Question, SeasonSurveyResponse as Response
+from .models import Payslip, SeasonSurveyQuestion as Question, SeasonSurveyResponse as Response, MonthlyReport
+from django.contrib import messages
 
 @login_required
 def monthly_report(request):
@@ -11,14 +12,16 @@ def monthly_report(request):
             report_form = form.save(commit=False)
             report_form.user = request.user
             report_form.save()
-            return redirect('success')
+            messages.success(request, "گزارش ماهانه با موفقیت ثبت شد.")
+            return redirect('last_report')
     else:
         form = ReportForm()
     return render(request, 'surveys/report_form.html', {'form': form})
 
-def success(request):
-    return render(request, 'surveys/success.html')
-
+@login_required
+def last_report(request):
+    report = MonthlyReport.objects.filter(user=request.user).order_by('-created_at')[:1]
+    return render(request, 'surveys/last_report.html', {'report': report})
 
 
 @login_required
@@ -35,14 +38,12 @@ def survey_view(request):
                     question=question,
                     defaults={'rating': rating}
                 )
-            return redirect('success')
+            messages.success(request, "نظرسنجی با موفقیت ثبت شد.")
+            return redirect('season_survey')
     else:
         form = SeasonForm()
 
     return render(request, 'surveys/season_survey.html', {'form': form})
-
-def survey_success(request):
-    return render(request, 'surveys/success.html')
 
 
 @login_required

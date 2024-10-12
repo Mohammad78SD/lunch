@@ -1041,7 +1041,7 @@ table th {
 
 .item-eye:before {
     content: '\e065';
-    font-size: 14px;
+    font-size: 10px;
 }
 
 .item-lock:before {

@@ -1,20 +1,33 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="bg-white" style="margin: 20px;">
+<div class="main-content font-size-13">
+    <style>
+        .main-content a {
+            color: #000 !important;
+        }
+    </style>
+<div class="tab__box">
+    <div class="tab__items">
+        <a class="tab__item " href="{% url 'file_list' %}">لیست فایل ها</a>
+        <a class="tab__item is-active" href="{% url 'send_file' %}">ارسال یک فایل جدید</a>
+    </div>
+</div>
+<div class="bg-white">
     <p class="box__title">ارسال یک فایل جدید</p>
     <form action="{% url 'send_file' %}" method="post" enctype="multipart/form-data" class="padding-30">
         {% csrf_token %}
 
-        <!-- Render the file name field -->
+        <!-- File Name Field -->
         <div class="form-group" style="margin-bottom: 20px;">
-            {{ form.name|as_crispy_field }}  <!-- Render the name field from the form -->
+            <label for="name">نام فایل:</label>
+            <input type="text" name="name" id="name" style="background-color: #f9f9f9; padding: 10px; border-radius: 25px;" class="form-control" placeholder="نام فایل را وارد کنید" required>
         </div>
 
-        <!-- Render the file upload field -->
+        <!-- File Upload Field -->
         <div class="form-group" style="margin-bottom: 20px;">
-            {{ form.file|as_crispy_field }}  <!-- Render the file field from the form -->
+            <label for="file">انتخاب فایل:</label>
+            <input type="file" name="file" id="file" class="form-control" required>
         </div>
 
         <!-- Custom Dropdown for Recipients -->
@@ -32,11 +45,12 @@
         </div>
 
         <!-- Hidden input to store selected recipient IDs -->
-        <input type="hidden" name="recipients_dropdown" id="recipients_dropdown">
+        <input type="hidden" name="recipients" id="recipients_dropdown">
 
         <!-- Submit Button -->
-        <button class="btn btn-netcopy_net" style="margin-top: 20px;">ارسال فایل‭</button>
+        <button class="btn btn-netcopy_net" style="margin-top: 20px;">ارسال فایل</button>
     </form>
+</div>
 </div>
 
 <!-- CSS for custom dropdown and input field -->

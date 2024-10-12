@@ -5,10 +5,10 @@ from django.shortcuts import render, redirect
 from .models import WebPushSubscription, Notification, SharedFile
 import json
 from django.contrib.auth.decorators import login_required
-from .forms import FileUploadForm
 from lunch.models import CustomUser as User
 def home(request):
     return render(request, 'messaging/home.html')
+from django.contrib import messages
 
 @csrf_exempt
 def save_subscription(request):
@@ -40,31 +40,41 @@ def offline(request):
 
 @login_required
 def send_file(request):
-    print("in send file view")
+    print("In send file view")
     if not request.user.is_file:
         return HttpResponseForbidden("You do not have permission to access this feature.")
 
     if request.method == 'POST':
-        form = FileUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            shared_file = form.save(commit=False)
-            shared_file.sender = request.user
-            shared_file.save()
-            form.save_m2m()  # Save many-to-many relationships
-            return redirect('file_list') # Redirect to a list of sent/received files
+        # Extract file and recipients from the request
+        file = request.FILES.get('file')
+        name = request.POST.get('name', '')
+        recipients_ids = request.POST.get('recipients', '').split(',')
+        
+        # Convert recipient IDs to integers and filter out any invalid IDs
+        recipients_ids = [int(id) for id in recipients_ids if id.isdigit()]
+
+        # Create a new SharedFile instance
+        shared_file = SharedFile(sender=request.user, name=name, file=file)
+
+        # Save the shared file instance
+        shared_file.save()
+
+        # Set the recipients using the list of IDs
+        shared_file.recipients.set(recipients_ids)
+        messages.success(request, "فایل شما با موفقیت ارسال شد!")
+        return redirect('file_list')  # Redirect to a list of sent/received files
     else:
-        form = FileUploadForm()
-    users = User.objects.all()
-    return render(request, 'messaging/send_file.html', {'form': form, 'users': users})
+        # Get all users for the dropdown
+        users = User.objects.all()
+        return render(request, 'messaging/send_file.html', {'users': users})
 
 
 @login_required
 def file_list(request):
     if not request.user.is_file:
         return HttpResponseForbidden("You do not have permission to access this feature.")
-    sent_files = request.user.sent_files.all()
-    received_files = request.user.received_files.all()
-    return render(request, 'messaging/file_list.html', {'sent_files': sent_files, 'received_files': received_files})
+    received_files = request.user.received_files.all().order_by('-created_at')
+    return render(request, 'messaging/file_list.html', {'received_files': received_files})
 
 
 @login_required

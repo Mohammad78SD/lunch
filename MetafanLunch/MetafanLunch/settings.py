@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "sqlite3",
     "messaging",
     "pwa",
+    'attendance',
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"

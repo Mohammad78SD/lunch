@@ -28,6 +28,7 @@ urlpatterns = [
     path("get-vapid-key/", views.get_vapid_key, name="get_vapid_key"),
     path("messages/", include("messaging.urls")),
     path("offline/", views.offline, name="offline"),
+    path("attendance/", include("attendance.urls")),
     path("", include("pwa.urls")),
 ]
 

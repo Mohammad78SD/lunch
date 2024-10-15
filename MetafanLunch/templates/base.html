@@ -40,7 +40,7 @@
         {% if user.is_file and user.is_staff%}
         <ul>
             <li class="item-li i-dashboard {% if request.resolver_match.url_name == 'home' %}is-active{% endif %}"><a href="{% url 'home' %}">پیشخوان</a></li>
-            <li class="item-li i-transactions"><a href="articles.html">ساعت ورود و خروج</a></li>
+            <li class="item-li i-transactions {% if request.resolver_match.url_name == 'attendance' or request.resolver_match.url_name == 'attendance_list' %}is-active{% endif %}"><a href="{% url 'attendance' %}">ساعت ورود و خروج</a></li>
             <li class="item-li i-courses {% if request.resolver_match.url_name == 'reserve_lunch' %}is-active{% endif %}"><a href="{% url 'reserve_lunch' %}">رزرو ناهار</a></li>
             <li class="item-li i-user__inforamtion {% if request.resolver_match.url_name == 'monthly_report' or request.resolver_match.url_name == 'last_report' %}is-active{% endif %}"><a href="{% url 'last_report' %}">گزارش ماهانه</a></li>
             <li class="item-li i-categories {% if request.resolver_match.url_name == 'season_survey' %}is-active{% endif %}"><a href="{% url 'season_survey' %}">نظرسنجی فصلی</a></li>

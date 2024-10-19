@@ -2,7 +2,7 @@ from django.db import models
 from django_jalali.db import models as jmodels
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
-
+import jdatetime
 
 
 class Lunch(models.Model):
@@ -10,6 +10,11 @@ class Lunch(models.Model):
 
     date = jmodels.jDateField()
     is_lunch_requested = models.BooleanField(default=False)
+    
+    @classmethod
+    def is_lunch_requested_today(cls, user):
+        today = jdatetime.datetime.now().date()
+        return cls.objects.filter(user=user, date=today).exists()
     
     class Meta:
         unique_together = ('user', 'date')
@@ -48,6 +53,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     education = models.CharField(max_length=30, verbose_name='آخرین مدرک تحصیلی', null=True, blank=True)
     major = models.CharField(max_length=30, verbose_name='رشته تحصیلی', null=True, blank=True)
     start_date = jmodels.jDateField(verbose_name='تاریخ شروع به کار', null=True, blank=True)
+    salary = models.PositiveIntegerField(verbose_name='حقوق ساعتی', null=True, blank=True)
     description = models.TextField(verbose_name='توضیحات' ,null=True, blank=True)
     end_date = jmodels.jDateField(verbose_name='تاریخ پایان کار', null=True, blank=True)
 

@@ -18,6 +18,21 @@ import jdatetime
 from .utils import send_sms
 from django.http import HttpResponse
 from django.core.cache import cache
+from attendance.models import AttendaceRecord
+from datetime import timedelta
+
+from django.db.models import Q
+
+
+
+
+def home(request):
+
+    this_month_total_time = AttendaceRecord.total_attendance_duration_this_month(request.user)
+    print(this_month_total_time)
+    today_lunch = Lunch.is_lunch_requested_today(request.user)
+    print(today_lunch)
+    return render(request, 'home.html')
 
 
 def send_lunch_reservation_sms(request):

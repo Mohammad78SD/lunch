@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.conf.urls.static import static
 from messaging import views
-
+from lunch.views import home
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "dashboard.html"
@@ -23,7 +23,7 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
     path("surveys/", include("surveys.urls")),
     path("dashboard/", DashboardView.as_view(), name="dashboard"),
-    path("home/", views.home, name="home"),
+    path("home/", home, name="home"),
     path("save-subscription/", views.save_subscription, name="save_subscription"),
     path("get-vapid-key/", views.get_vapid_key, name="get_vapid_key"),
     path("messages/", include("messaging.urls")),

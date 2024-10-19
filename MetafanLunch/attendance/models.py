@@ -2,7 +2,8 @@ from django.db import models
 from django_jalali.db import models as jmodels
 from lunch.models import CustomUser as User
 import jdatetime
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.db.models import Q
 
 class AttendaceRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -10,13 +11,39 @@ class AttendaceRecord(models.Model):
     check_in = models.TimeField()
     check_out = models.TimeField(null=True, blank=True)
     
+    @classmethod
+    def total_attendance_duration_this_month(cls, user):
+        if jdatetime.datetime.now().day < 21:
+            year = jdatetime.datetime.now().year
+            month = jdatetime.datetime.now().month
+            j_start_date = jdatetime.date(year, month, 21).replace(month=month-1)
+            j_end_date = jdatetime.date(year, month, 20)
+
+        else:
+            year = jdatetime.datetime.now().year
+            month = jdatetime.datetime.now().month
+            j_start_date = jdatetime.date(year, month, 21)
+            j_end_date = jdatetime.date(year, month, 20).replace(month=month+1)
+        date_range_query = Q(date__gte=j_start_date) & Q(date__lte=j_end_date)
+
+        attendances = cls.objects.filter(user=user).filter(date_range_query)
+        total_duration = timedelta()
+        for attendance in attendances:
+            total_duration += attendance.duration()
+        
+        return total_duration.total_seconds() / 3600
+    
     def duration(self):
+        if self.check_out is None:
+            return timedelta()
         # Combine the date with the check-in and check-out times to create datetime objects
         check_in_datetime = datetime.combine(datetime.today(), self.check_in)
         check_out_datetime = datetime.combine(datetime.today(), self.check_out)
-
-        # Calculate the difference between check-out and check-in
-        duration = check_out_datetime - check_in_datetime
+        # look here i want to minos 1 hour from duration if checkin time is between 9 and 11.30 am 
+        if check_in_datetime.time() > datetime.strptime('09:00', '%H:%M').time() and check_in_datetime.time() < datetime.strptime('11:30', '%H:%M').time() and check_out_datetime.time() > datetime.strptime('12:30', '%H:%M').time() > datetime.strptime('12:30', '%H:%M').time(): 
+            duration = check_out_datetime - check_in_datetime - timedelta(hours=1)
+        else:
+            duration = check_out_datetime - check_in_datetime
 
         return duration
     
@@ -39,15 +66,15 @@ class AttendanceRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = jmodels.jDateField(null=True, blank=True)
     
-    attendance = models.ForeignKey(AttendaceRecord, on_delete=models.CASCADE, related_name='change_requests')
+    attendance = models.ForeignKey(AttendaceRecord, on_delete=models.CASCADE, related_name='change_requests', null=True, blank=True)
     requested_check_in = models.TimeField(null=True, blank=True)
     requested_check_out = models.TimeField(null=True, blank=True)
     request_reason = models.TextField()
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')], default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = jmodels.jDateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"درخواست بازبینی {self.user.last_name} - {self.attendance.date}"
+        return f"درخواست بازبینی {self.user.last_name} - {self.created_at}"
     
     def save(self, *args, **kwargs):
         if self.status == 'approved':
@@ -58,3 +85,5 @@ class AttendanceRequest(models.Model):
             else:
                 self.attendance = AttendaceRecord.objects.create(user=self.user, date=self.date, check_in=self.requested_check_in, check_out=self.requested_check_out)
         super().save(*args, **kwargs)
+        
+    

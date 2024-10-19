@@ -6,9 +6,10 @@ from .models import WebPushSubscription, Notification, SharedFile
 import json
 from django.contrib.auth.decorators import login_required
 from lunch.models import CustomUser as User
-def home(request):
-    return render(request, 'messaging/home.html')
+
 from django.contrib import messages
+
+
 
 @csrf_exempt
 def save_subscription(request):

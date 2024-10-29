@@ -28,7 +28,6 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-
 AUTH_USER_MODEL = "lunch.CustomUser"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,11 +48,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["panel.metafan.info", "127.0.0.1", "*"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    "unfold",
+    # "unfold",
     "crispy_forms",
     "crispy_bootstrap4",
     "django.contrib.admin",
@@ -62,6 +60,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     "lunch",
     "django_jalali",
     "surveys",

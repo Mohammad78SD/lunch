@@ -53,7 +53,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     education = models.CharField(max_length=30, verbose_name='آخرین مدرک تحصیلی', null=True, blank=True)
     major = models.CharField(max_length=30, verbose_name='رشته تحصیلی', null=True, blank=True)
     start_date = jmodels.jDateField(verbose_name='تاریخ شروع به کار', null=True, blank=True)
-    salary = models.PositiveIntegerField(verbose_name='حقوق ساعتی', null=True, blank=True)
+    salary = models.PositiveIntegerField(verbose_name='حقوق ساعتی', default=0)
     description = models.TextField(verbose_name='توضیحات' ,null=True, blank=True)
     end_date = jmodels.jDateField(verbose_name='تاریخ پایان کار', null=True, blank=True)
 
@@ -66,6 +66,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = ['first_name', 'last_name']
     
+
+    def has_filled_report_for_previous_month(self):
+        today = jdatetime.date.today()
+        previous_month = today.month - 1 if today.month > 1 else 12
+        previous_year = today.year if today.month > 1 else today.year - 1
+
+        print(previous_month, previous_year)
+        from surveys.models import MonthlyReport
+        start_date = jdatetime.date(previous_year, 1, 1)
+        end_date = jdatetime.date(previous_year, 12, 30)
+        return MonthlyReport.objects.filter(user=self, month=previous_month, created_at__gte=start_date, created_at__lte=end_date).exists()
+         
+    
+    
+    def count_received_files(self):
+        return self.received_files.filter(seen=False).count()
     
     class Meta:
         verbose_name = "کاربر"

@@ -1,7 +1,9 @@
+from django.contrib.auth import get_user_model
+CustomUser = get_user_model()
 from django.db import models
-from lunch.models import CustomUser
 from django_jalali.db import models as jmodels
 import jdatetime
+
 
 class MonthlyReport(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -14,6 +16,7 @@ class MonthlyReport(models.Model):
     def __str__(self):
         moonth = jdatetime.date(1400, self.month , 1).strftime('%B')
         return (f'گزارش {moonth} ماه {self.user.first_name} {self.user.last_name}')
+
     
     
 class Season(models.Model):

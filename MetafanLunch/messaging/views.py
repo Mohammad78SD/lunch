@@ -85,6 +85,8 @@ def download_file(request, file_id):
 
     try:
         shared_file = SharedFile.objects.get(id=file_id, recipients=request.user) # Ensure user is a recipient
+        shared_file.seen = True
+        shared_file.save()
     except SharedFile.DoesNotExist:
         raise Http404("File not found.")
     

@@ -75,7 +75,7 @@ class CustomUserAdmin(BaseUserAdmin):
                 )
             },
         ),
-        ("سابقه کاربر", {"fields": ("education", "major", "start_date", "end_date")}),
+        ("سابقه کاربر", {"fields": ("education", "major", "start_date", "end_date", "salary")}),
         ("Permissions", {"fields": ("is_file", "is_staff", "is_superuser")}),
     )
     add_fieldsets = (

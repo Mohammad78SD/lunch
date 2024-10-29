@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from .models import Lunch, OTP, CustomUser
-from django.contrib.auth.forms import UserCreationForm
-from django.utils import timezone
 import random
 from django.contrib.auth.hashers import make_password
 from .utils import send_otp, send_sms
@@ -11,28 +9,49 @@ from django.contrib import messages
 import jdatetime
 import datetime
 
-# tasks
-# from datetime import datetime, timedelta
+
 from .models import Lunch
 import jdatetime
 from .utils import send_sms
 from django.http import HttpResponse
 from django.core.cache import cache
 from attendance.models import AttendaceRecord
-from datetime import timedelta
+from messaging.models import Notification
+from surveys.models import Payslip
 
-from django.db.models import Q
+from django.contrib.humanize.templatetags.humanize import intcomma
 
 
-
-
+@login_required
 def home(request):
+    user = request.user
 
     this_month_total_time = AttendaceRecord.total_attendance_duration_this_month(request.user)
-    print(this_month_total_time)
+
     today_lunch = Lunch.is_lunch_requested_today(request.user)
-    print(today_lunch)
-    return render(request, 'home.html')
+
+    received_files_count = user.count_received_files()
+
+    notifications = Notification.objects.all().order_by('-created_at')[:3]
+
+    monthly_report_filled = user.has_filled_report_for_previous_month()
+
+    today_attendance = AttendaceRecord.objects.filter(user=request.user, date=jdatetime.date.today()).first()
+    if today_attendance:
+        today_price = AttendaceRecord.duration(today_attendance).total_seconds() / 3600 * user.salary
+    else:
+        today_price = 0
+    payslips = Payslip.objects.filter(user=request.user)[:1]
+    print(payslips)
+    return render(request, "home.html", {
+        'this_month_total_time': int(this_month_total_time),
+        'today_lunch': today_lunch,
+        'received_files_count': received_files_count,
+        'notifications': notifications,
+        'monthly_report_filled': monthly_report_filled,
+        'today_price': f"{int(today_price):,}",
+        'payslips': payslips
+    })
 
 
 def send_lunch_reservation_sms(request):

@@ -1,9 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django_jalali.db import models as jmodels
-from lunch.models import CustomUser as User
 import jdatetime
 from datetime import datetime, timedelta
 from django.db.models import Q
+User = get_user_model()
 
 class AttendaceRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -34,13 +35,13 @@ class AttendaceRecord(models.Model):
         return total_duration.total_seconds() / 3600
     
     def duration(self):
-        if self.check_out is None:
-            return timedelta()
         # Combine the date with the check-in and check-out times to create datetime objects
         check_in_datetime = datetime.combine(datetime.today(), self.check_in)
+        if self.check_out is None:
+            self.check_out = datetime.now().time()
         check_out_datetime = datetime.combine(datetime.today(), self.check_out)
         # look here i want to minos 1 hour from duration if checkin time is between 9 and 11.30 am 
-        if check_in_datetime.time() > datetime.strptime('09:00', '%H:%M').time() and check_in_datetime.time() < datetime.strptime('11:30', '%H:%M').time() and check_out_datetime.time() > datetime.strptime('12:30', '%H:%M').time() > datetime.strptime('12:30', '%H:%M').time(): 
+        if check_in_datetime.time() > datetime.strptime('09:00', '%H:%M').time() and check_in_datetime.time() < datetime.strptime('11:30', '%H:%M').time() and check_out_datetime.time() > datetime.strptime('12:30', '%H:%M').time(): 
             duration = check_out_datetime - check_in_datetime - timedelta(hours=1)
         else:
             duration = check_out_datetime - check_in_datetime
